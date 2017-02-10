@@ -1,3 +1,6 @@
+.PHONY: pull
+pull:
+	docker pull jimmycuadra/rust
 .PHONY: d
 d:
 	docker run -d -ti -v `pwd`:/source jimmycuadra/rust
