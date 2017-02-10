@@ -8,12 +8,12 @@ name:
 
 .PHONY: build
 build:
-	docker exec -ti ${name} cargo build
+	docker exec -ti `make name | awk 'END{print}'` cargo build
 
 .PHONY: run
 run:
-	docker exec -ti ${name} cargo run
+	docker exec -ti `make name | awk 'END{print}'` cargo run
 
 .PHONY: do
 do:
-	make build name=${name} && make run name=${name}
+	make build && make run
