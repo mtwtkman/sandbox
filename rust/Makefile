@@ -1,15 +1,19 @@
 .PHONY: d
 d:
-	docker run -d -v `pwd`:/source jimmycuadra/rust
+	docker run -d -ti -v `pwd`:/source jimmycuadra/rust
+
+.PHONY: name
+name:
+	docker ps -f ancestor=jimmycuadra/rust --format "{{.Names}}"
 
 .PHONY: build
 build:
-	docker exec -ti hungry_hypatia cargo build
+	docker exec -ti ${name} cargo build
 
 .PHONY: run
 run:
-	docker exec -ti hungry_hypatia cargo run
+	docker exec -ti ${name} cargo run
 
 .PHONY: do
 do:
-	make build && make run
+	make build name=${name} && make run name=${name}
