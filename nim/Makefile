@@ -2,8 +2,8 @@
 pull:
 	docker pull frolvlad/alpine-nim
 
-.PHONY: start
-start:
+.PHONY: d
+d:
 	docker run -d --rm -ti -v `pwd`:/source frolvlad/alpine-nim /bin/sh
 
 .PHONY: name
@@ -12,4 +12,4 @@ name:
 
 .PHONY: run
 run:
-	docker exec -ti `make name | awk 'END{print}'` nim compile --run /source/${name}
+	docker exec -ti `make name | awk 'END{print}'` nim compile --run /source/${name}.nim
