@@ -31,4 +31,4 @@ rm:
 
 .PHONY: test
 test:
-	docker exec -ti `make name | awk 'END{print}'` cargo test
+	docker exec -ti `make name | awk 'END{print}'` cargo test ${opt}

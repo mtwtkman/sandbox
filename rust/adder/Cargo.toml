@@ -1,0 +1,10 @@
+[package]
+name = "adder"
+version = "0.1.0"
+authors = ["root"]
+
+[dependencies]
+
+[features]
+default = []
+secure-password = ["bcrypt"]
