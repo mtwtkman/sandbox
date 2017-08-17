@@ -5,4 +5,5 @@ cmd=$1
 case $1 in
   "up") docker run -ti -d --name sbt --rm -v `pwd`:/app scala bash;;
   "new") docker exec -ti sbt sbt new sbt/scala-seed.g8;;
+  "repl") docker exec -ti sbt bash -c "cd ./hello && sbt";;
 esac
