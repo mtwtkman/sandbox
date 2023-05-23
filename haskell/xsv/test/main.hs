@@ -3,12 +3,17 @@ module Main where
 import Data.List (intercalate)
 import Test.Tasty
 import Test.Tasty.HUnit
-import Xsv (splitByDelimiter, xsv)
+import Xsv (makeLines, splitByDelimiter)
 
 main = defaultMain tests
 
 tests :: TestTree
-tests = testGroup "Xsv Tests" [splitByDelimiterTest]
+tests =
+  testGroup
+    "Xsv Tests"
+    [ splitByDelimiterTest,
+      makeLinesTest
+    ]
 
 splitByDelimiterTest :: TestTree
 splitByDelimiterTest =
@@ -27,4 +32,12 @@ splitByDelimiterTest =
       testCase ("splits correctly " <> msg) $
         assertBool
           "equals inversion"
-          (splitByDelimiter (xsv d) (intercalate [d] e) == e)
+          (splitByDelimiter d (intercalate [d] e) == e)
+
+makeLinesTest :: TestTree
+makeLinesTest =
+  testGroup
+    "makeLines"
+    [ testCase "decompose source string" $
+        assertEqual "" (makeLines "a,b,c\nx,y,z\n" ',') [["a", "b", "c"], ["x", "y", "z"]]
+    ]

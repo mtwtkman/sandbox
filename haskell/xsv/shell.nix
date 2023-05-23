@@ -17,7 +17,6 @@ mkShell {
     alias fmt="ormolu -i ./**/*.hs"
     alias repl="cabal repl"
     alias run="cabal run --"
-    alias t="cabal test"
-
+    alias t="cabal run test"
   '';
 }
