@@ -1,0 +1,35 @@
+cabal-version: 3.0
+name:          xsv
+version:       0.1.0.0
+license:       MIT
+build-type:    Simple
+
+common warnings
+  ghc-options: -Wall
+
+executable xsv
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:    base, xsv
+  hs-source-dirs:   app
+  default-language: Haskell2010
+
+library
+  build-depends: base
+  hs-source-dirs:   lib
+  default-language: Haskell2010
+  exposed-modules:
+    Xsv
+
+test-suite test
+  main-is:          main.hs
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   test
+  build-depends:
+    , base
+    , HUnit
+    , tasty
+    , tasty-hunit
+    , xsv
+
+  default-language: Haskell2010

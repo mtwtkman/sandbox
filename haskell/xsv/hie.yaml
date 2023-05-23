@@ -1,0 +1,8 @@
+cradle:
+  cabal:
+    - path: "./test"
+      component: "xsv:test"
+    - path: "./app"
+      component: "xsv:exe:xsv"
+    - path: "./lib"
+      component: "lib:xsv"
