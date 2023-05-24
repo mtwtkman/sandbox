@@ -1,4 +1,4 @@
-module Xsv where
+module Xsv  where
 
 import Data.Tuple (swap)
 
@@ -17,47 +17,51 @@ data Xsv = Xsv
   }
   deriving (Show, Eq)
 
+newtype SplittedLine = SplittedLine { splittedLine :: [String] } deriving (Eq, Show)
+newtype ProcessedContents = ProcessedContents [SplittedLine] deriving (Eq, Show)
+
 xsv :: Char -> Xsv
 xsv = Xsv Nothing []
 
-data Error = FileNotFound | CannotParse
+data Error = NoHeader
   deriving (Show, Eq)
 
-splitByDelimiter :: Char -> String -> [String]
-splitByDelimiter d = uncurry (:) . swap . foldr (\c (acc, vs) -> if c == d then (vs : acc, "") else (acc, c : vs)) ([], "")
+splitByDelimiter :: Char -> String -> SplittedLine
+splitByDelimiter d = SplittedLine . uncurry (:) . swap . foldr (\c (acc, vs) -> if c == d then (vs : acc, "") else (acc, c : vs)) ([], "")
 
-makeLines :: String -> Char -> [[String]]
-makeLines s c = map (splitByDelimiter c) $ lines s
+process :: String -> Char -> ProcessedContents
+process s c = ProcessedContents $ map (splitByDelimiter c) (lines s)
 
-makeRows :: [[String]] -> [Row]
-makeRows = map (Row . map Value)
+makeRows :: ProcessedContents -> [Row]
+makeRows (ProcessedContents s) = map (Row . map Value . splittedLine) s
 
-makeHeader :: [String] -> Header
-makeHeader = Header . map Field
+makeHeader :: SplittedLine -> Header
+makeHeader = Header . map Field . splittedLine
 
-parseHeader :: Xsv -> String -> Xsv
-parseHeader x s =
-  let d = xsvDelimiter x
-   in Xsv
-        (Just $ makeHeader (splitByDelimiter d s))
-        (xsvRows x)
-        d
+parseHeader :: Xsv -> SplittedLine -> Xsv
+parseHeader x l = Xsv
+                    (Just $ makeHeader l)
+                    (xsvRows x)
+                    (xsvDelimiter x)
 
-parseRow :: Xsv -> String -> Xsv
-parseRow x s =
-  let d = xsvDelimiter x
-   in Xsv
-        (xsvHeader x)
-        (makeRows $ makeLines s d)
-        d
+parseRows :: Xsv -> ProcessedContents -> Xsv
+parseRows x s = Xsv
+                (xsvHeader x)
+                (makeRows s)
+                (xsvDelimiter x)
 
-addRow :: Xsv -> Row -> Xsv
-addRow x row = Xsv (xsvHeader x) (xsvRows x <> [row]) (xsvDelimiter x)
-
-setHeader :: Xsv -> Header -> Xsv
-setHeader x h = Xsv (Just h) (xsvRows x) (xsvDelimiter x)
-
-parse :: FilePath -> IO (Either Error Xsv)
-parse src = do
+parse :: FilePath -> Char -> IO (Either Error Xsv)
+parse src c = do
   contents <- readFile src
-  undefined
+  let parsed = parseRows (xsv c) (process contents c)
+  return $ Right parsed
+
+headeredParse :: FilePath -> Char -> IO (Either Error Xsv )
+headeredParse src c = do
+  contents <- readFile src
+  let processed = process contents c
+  case processed of
+    ProcessedContents [] -> return $ Left NoHeader
+    ProcessedContents (header:rows) ->
+      let x = parseHeader (xsv c) header
+       in return $ Right (parseRows x (ProcessedContents rows))
