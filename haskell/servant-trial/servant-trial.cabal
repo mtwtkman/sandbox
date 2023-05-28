@@ -1,0 +1,79 @@
+cabal-version: 3.0
+name:          servant-trial
+version:       0.1.0.0
+build-type:    Simple
+
+common warnings
+  ghc-options: -Wall
+
+executable example1
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , aeson
+    , attoparsec
+    , base
+    , base-compat-batteries
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , directory
+    , http-media
+    , lucid
+    , mtl
+    , servant
+    , servant-server
+    , string-conversions
+    , time
+    , wai
+    , warp
+  hs-source-dirs:   example1
+  default-language: Haskell2010
+
+executable example2
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , aeson
+    , attoparsec
+    , base
+    , base-compat-batteries
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , directory
+    , http-media
+    , lucid
+    , mtl
+    , servant
+    , servant-server
+    , string-conversions
+    , time
+    , wai
+    , warp
+  hs-source-dirs:   example2
+  default-language: Haskell2010
+
+executable example3
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , aeson
+    , attoparsec
+    , base
+    , base-compat-batteries
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , directory
+    , http-media
+    , lucid
+    , mtl
+    , servant
+    , servant-server
+    , string-conversions
+    , time
+    , wai
+    , warp
+  hs-source-dirs:   example3
+  default-language: Haskell2010
