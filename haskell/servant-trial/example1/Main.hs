@@ -1,7 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
@@ -10,29 +9,22 @@
 
 module Main where
 
-import Control.Monad.Except
-import Control.Monad.Reader
-import Data.Aeson
-import qualified Data.Aeson.Parser
-import Data.Aeson.Types
-import Data.Attoparsec.ByteString
-import Data.ByteString (ByteString)
-import Data.List
-import Data.Maybe
-import Data.String.Conversions
-import Data.Time.Calendar
-import GHC.Generics
-import Lucid
-import Network.HTTP.Media ((//), (/:))
-import Network.Wai
-import Network.Wai.Handler.Warp
-import Prelude.Compat
+import Control.Monad.Except (Monad (return))
+import Data.Aeson (ToJSON)
+import Data.Time.Calendar (Day, fromGregorian)
+import GHC.Generics (Generic)
+import Network.Wai (Application)
+import Network.Wai.Handler.Warp (run)
+import Prelude.Compat (Eq, IO, Int, Show, String)
 import Servant
-import Servant.Types.SourceT (source)
-import System.Directory
-import Text.Blaze
-import Text.Blaze.Html
-import qualified Text.Blaze.Html
+  ( Get,
+    JSON,
+    Proxy (..),
+    Server,
+    serve,
+    type (:<|>) (..),
+    type (:>),
+  )
 import Prelude ()
 
 type UserAPI1 = "users" :> Get '[JSON] [User]

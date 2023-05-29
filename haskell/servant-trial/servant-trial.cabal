@@ -11,19 +11,11 @@ executable example1
   main-is:          Main.hs
   build-depends:
     , aeson
-    , attoparsec
     , base
     , base-compat-batteries
-    , blaze-html
-    , blaze-markup
-    , bytestring
-    , directory
-    , http-media
-    , lucid
     , mtl
     , servant
     , servant-server
-    , string-conversions
     , time
     , wai
     , warp
