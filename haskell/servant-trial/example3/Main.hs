@@ -9,34 +9,35 @@
 
 module Main where
 
-import Control.Monad.Except ( Monad(return) )
+import Control.Monad.Except (Monad (return))
 import Control.Monad.Reader ()
-import Data.Aeson ( ToJSON )
+import Data.Aeson (ToJSON)
 import Data.Aeson.Types ()
 import Data.Attoparsec.ByteString ()
 import Data.List ()
 import Data.Maybe ()
 import Data.String.Conversions ()
 import Data.Time.Calendar ()
-import GHC.Generics ( Generic )
-import Lucid ( renderBS, table_, td_, th_, tr_, Html, ToHtml(..) )
+import GHC.Generics (Generic)
+import Lucid (Html, ToHtml (..), renderBS, table_, td_, th_, tr_)
 import Network.HTTP.Media ((//), (/:))
-import Network.Wai ( Application )
-import Network.Wai.Handler.Warp ( run )
-import Prelude.Compat ( ($), Foldable(foldMap), String, IO, (.) )
+import Network.Wai (Application)
+import Network.Wai.Handler.Warp (run)
+import Prelude.Compat (Foldable (foldMap), IO, String, ($), (.))
 import Servant
-    ( Proxy(..),
-      serve,
-      Accept(contentType),
-      JSON,
-      MimeRender(..),
-      type (:>),
-      Get,
-      Server )
+  ( Accept (contentType),
+    Get,
+    JSON,
+    MimeRender (..),
+    Proxy (..),
+    Server,
+    serve,
+    type (:>),
+  )
 import System.Directory ()
-import Text.Blaze ( ToMarkup )
-import Text.Blaze.Html ( toHtml, Html )
-import Text.Blaze.Html.Renderer.Utf8 ( renderHtml )
+import Text.Blaze (ToMarkup)
+import Text.Blaze.Html (Html, toHtml)
+import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Prelude ()
 
 data HTMLLucid
