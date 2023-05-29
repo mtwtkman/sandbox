@@ -35,3 +35,4 @@ import Text.Blaze.Html
 import qualified Text.Blaze.Html
 import Text.Blaze.Html.Renderer.Utf8
 import Prelude ()
+

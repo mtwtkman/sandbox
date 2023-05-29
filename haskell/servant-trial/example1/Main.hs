@@ -9,13 +9,11 @@
 
 module Main where
 
-import Control.Monad.Except (Monad (return))
 import Data.Aeson (ToJSON)
 import Data.Time.Calendar (Day, fromGregorian)
 import GHC.Generics (Generic)
 import Network.Wai (Application)
 import Network.Wai.Handler.Warp (run)
-import Prelude.Compat (Eq, IO, Int, Show, String)
 import Servant
   ( Get,
     JSON,
@@ -25,7 +23,6 @@ import Servant
     type (:<|>) (..),
     type (:>),
   )
-import Prelude ()
 
 type UserAPI1 = "users" :> Get '[JSON] [User]
 
