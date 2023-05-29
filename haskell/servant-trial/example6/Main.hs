@@ -1,7 +1,5 @@
 {-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
@@ -10,29 +8,27 @@
 
 module Main where
 
-import Control.Monad.Except
-import Control.Monad.Reader
-import Data.Aeson
-import qualified Data.Aeson.Parser
-import Data.Aeson.Types
-import Data.Attoparsec.ByteString
-import Data.ByteString (ByteString)
-import Data.List
-import Data.Maybe
-import Data.Time.Calendar
-import GHC.Generics
-import Lucid
-import Network.HTTP.Media ((//), (/:))
-import Network.Wai
-import Network.Wai.Handler.Warp
+import Network.Wai (Application)
+import Network.Wai.Handler.Warp (run)
 import Servant
-import Servant.Types.SourceT (source)
-import System.Directory
-import Text.Blaze
-import Text.Blaze.Html
-import qualified Text.Blaze.Html
-import Text.Blaze.Html.Renderer.Utf8
+  ( Proxy (..),
+    Raw,
+    Server,
+    serve,
+    serveDirectoryWebApp,
+    type (:>),
+  )
 
+type StaticAPI = "static" :> Raw
+
+staticAPI :: Proxy StaticAPI
+staticAPI = Proxy
+
+server :: Server StaticAPI
+server = serveDirectoryWebApp "static-files"
+
+app :: Application
+app = serve staticAPI server
 
 main :: IO ()
-main = undefined
+main = run 8081 app
