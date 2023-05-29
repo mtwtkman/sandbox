@@ -62,20 +62,11 @@ executable example4
   main-is:          Main.hs
   build-depends:
     , aeson
-    , attoparsec
     , base
-    , base-compat-batteries
-    , blaze-html
-    , blaze-markup
-    , bytestring
     , directory
-    , http-media
-    , lucid
     , mtl
     , servant
     , servant-server
-    , string-conversions
-    , time
     , wai
     , warp
 
@@ -89,7 +80,6 @@ executable example4
 --     , aeson
 --     , attoparsec
 --     , base
---     , base-compat-batteries
 --     , blaze-html
 --     , blaze-markup
 --     , bytestring
@@ -99,7 +89,6 @@ executable example4
 --     , mtl
 --     , servant
 --     , servant-server
---     , string-conversions
 --     , time
 --     , wai
 --     , warp

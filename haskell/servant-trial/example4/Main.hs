@@ -1,7 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
@@ -11,27 +10,46 @@
 module Main where
 
 import Control.Monad.Except
-import Control.Monad.Reader
-import Data.Aeson
-import qualified Data.Aeson.Parser
-import Data.Aeson.Types
-import Data.Attoparsec.ByteString
-import Data.ByteString (ByteString)
-import Data.List
-import Data.Maybe
-import Data.String.Conversions
-import Data.Time.Calendar
-import GHC.Generics
-import Lucid
-import Network.HTTP.Media ((//), (/:))
-import Network.Wai
-import Network.Wai.Handler.Warp
-import Prelude.Compat
+  ( MonadError (throwError),
+    MonadIO (liftIO),
+    throwError,
+  )
+import Data.Aeson (ToJSON)
+import Data.Functor ((<&>))
+import GHC.Generics (Generic)
+import Network.Wai.Handler.Warp (run)
 import Servant
-import Servant.Types.SourceT (source)
-import System.Directory
-import Text.Blaze
-import Text.Blaze.Html
-import qualified Text.Blaze.Html
-import Text.Blaze.Html.Renderer.Utf8
-import Prelude ()
+  ( Application,
+    Get,
+    JSON,
+    Proxy (..),
+    Server,
+    ServerError (errBody),
+    err404,
+    serve,
+    type (:>),
+  )
+import System.Directory (doesFileExist)
+
+type IOAPI = "myfile.txt" :> Get '[JSON] FileContent
+
+newtype FileContent = FileContent
+  {content :: String}
+  deriving (Generic)
+
+instance ToJSON FileContent
+
+server :: Server IOAPI
+server = do
+  exists <- Control.Monad.Except.liftIO (doesFileExist "myfile.txt")
+  if exists
+    then liftIO (readFile "myfile.txt") <&> FileContent
+    else throwError custom404Err
+  where
+    custom404Err = err404 {errBody = "myfile.txt just isn't there, please leave this server alone."}
+
+app :: Application
+app = serve (Proxy :: Proxy IOAPI) server
+
+main :: IO ()
+main = run 8081 app
