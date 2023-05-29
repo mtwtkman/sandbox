@@ -20,5 +20,33 @@ mkShell {
     alias run="cabal run --"
     alias t="cabal test"
     alias fmtc="cabal-fmt -i servant-trial.cabal"
+    function gen() {
+      mkdir $1
+      cp template $1/Main.hs
+      echo "
+  executable $1
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+      , aeson
+      , attoparsec
+      , base
+      , blaze-html
+      , blaze-markup
+      , bytestring
+      , directory
+      , http-media
+      , lucid
+      , mtl
+      , servant
+      , servant-server
+      , time
+      , wai
+      , warp
+
+    hs-source-dirs: $1
+    default-language: Haskell2010" >> servant-trial.cabal
+      cabal-fmt -i ./servant-trial.cabal
+    }
   '';
 }
