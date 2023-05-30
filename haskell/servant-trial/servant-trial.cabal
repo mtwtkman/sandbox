@@ -118,3 +118,37 @@ executable example7
 
   hs-source-dirs:   example7
   default-language: Haskell2010
+
+executable example8
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , aeson
+    , base
+    , http-client
+    , servant
+    , servant-client
+    , servant-server
+    , wai
+    , warp
+
+  hs-source-dirs:   example8
+  default-language: Haskell2010
+
+executable example9
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , aeson
+    , base
+    , bytestring
+    , containers
+    , cookie
+    , servant
+    , servant-server
+    , text
+    , wai
+    , warp
+
+  hs-source-dirs:   example9
+  default-language: Haskell2010

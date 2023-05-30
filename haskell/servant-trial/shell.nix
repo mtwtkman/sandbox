@@ -29,18 +29,11 @@ mkShell {
     main-is:          Main.hs
     build-depends:
       , aeson
-      , attoparsec
       , base
-      , blaze-html
-      , blaze-markup
-      , bytestring
-      , directory
-      , http-media
-      , lucid
-      , mtl
+      , http-client
       , servant
+      , servant-client
       , servant-server
-      , time
       , wai
       , warp
 
