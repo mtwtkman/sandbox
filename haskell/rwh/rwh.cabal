@@ -1,0 +1,25 @@
+cabal-version:   3.0
+name:            rwh
+version:         0.1.0.0
+license:
+author:          924277+mtwtkman@users.noreply.github.com
+maintainer:      mtwtkman
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+common warnings
+  ghc-options: -Wall
+
+executable ch24
+  import:           warnings
+  main-is:          Main.hs
+  build-depends:
+    , base
+    , bytestring
+    , haskeline
+    , zlib
+    , containers
+
+  other-modules:    Compressor, MVarExample, NiceFork, Chan, Expensive, ModifyMVarStrict
+  hs-source-dirs:   ch24
+  default-language: Haskell2010

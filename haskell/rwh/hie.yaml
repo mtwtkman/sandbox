@@ -1,0 +1,4 @@
+cradle:
+  cabal:
+    - path: "./ch24"
+      component: "exe:ch24"
