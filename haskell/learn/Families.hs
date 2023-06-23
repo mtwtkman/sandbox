@@ -5,15 +5,42 @@
 
 module Main where
 
+import Control.Monad.Identity (Identity (..))
 import Data.Data (Proxy (..))
 import Data.Kind (Type)
 import GHC.Base (Symbol)
 import GHC.TypeLits (KnownSymbol, symbolVal)
 
+-- ref: https://serokell.io/blog/type-families-haskell
+
+-- Closed type family
 type Append :: forall a. [a] -> [a] -> [a]
 type family Append xs ys where
   Append '[] ys = ys
   Append (x ': xs) ys = x ': Append xs ys
+
+type S :: (Type -> Type) -> Type
+data S k = MkS (k Bool) (k Integer)
+
+s1 :: S Maybe
+s1 = MkS (Just True) Nothing
+
+s2 :: S (Either String)
+s2 = MkS (Left "hi") (Right 42)
+
+s3 :: S Identity
+s3 = MkS (Identity False) (Identity 0)
+
+-- Pair is type synonym. Pair is also sturated and non-generative.
+-- Maybe is unsaturated and generative because it is only equal to itself(means that it satisifies reflecxivity).
+--
+-- Equality:
+--    Pair Bool ~ Pair Bool -- refrexivity
+--    Pair Bool ~ Pair (Bool, Bool) -- reduction
+--
+-- Non-generative type must be saturated.
+type Pair :: Type -> Type
+type Pair a = (a, a)
 
 type HList :: [Type] -> Type
 data HList xs where
