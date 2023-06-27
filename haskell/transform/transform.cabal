@@ -1,0 +1,15 @@
+cabal-version:   3.0
+name:            transform
+version:         0.1.0.0
+maintainer:      mtwtkman
+build-type:      Simple
+
+common warnings
+    ghc-options: -Wall
+
+executable transform
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base ^>=4.16.4.0, mtl, time
+    hs-source-dirs:   app
+    default-language: Haskell2010

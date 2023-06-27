@@ -2,12 +2,19 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Main where
 
 import Control.Monad.Identity (Identity (..))
+import Data.Binary (Word8)
+import Data.ByteString
+import Data.ByteString qualified as ByteString
 import Data.Data (Proxy (..))
 import Data.Kind (Type)
+import Data.Maybe (maybeToList)
+import Data.Type.Bool (Not)
+import Data.Typeable (Typeable, typeRep)
 import GHC.Base (Symbol)
 import GHC.TypeLits (KnownSymbol, symbolVal)
 
@@ -41,6 +48,22 @@ s3 = MkS (Identity False) (Identity 0)
 -- Non-generative type must be saturated.
 type Pair :: Type -> Type
 type Pair a = (a, a)
+
+type MaybeIf :: Bool -> Type -> Type
+type family MaybeIf b where
+  MaybeIf 'True = Maybe
+  MaybeIf 'False = Identity
+
+data PlayerInfo b = MkPlayerInfo {name :: MaybeIf b String, score :: MaybeIf b Integer}
+
+dbReadPlayerInfo :: IO (PlayerInfo False)
+dbReadPlayerInfo = undefined
+
+dbUpdatePlayerInfo :: PlayerInfo True -> IO ()
+dbUpdatePlayerInfo = undefined
+
+-- When `MaybeIf` arity is 2, `AuxInfo` can't compile by ariby violation.
+newtype AuxInfo b = MkAuxInfo (S (MaybeIf b))
 
 type HList :: [Type] -> Type
 data HList xs where
@@ -82,7 +105,47 @@ type instance Label MyType = "mt"
 label :: forall t. KnownSymbol (Label t) => String
 label = symbolVal (Proxy @(Label t))
 
-data X = X
+class Container a where
+  type Elem a
+  type Elem x = Unwrap x
+  elements :: a -> [Elem a]
+
+instance Container [a] where
+  elements = id
+
+instance Container (Maybe a) where
+  elements = maybeToList
+
+instance Container ByteString where
+  type Elem ByteString = Word8
+  elements = ByteString.unpack
+
+type family Unwrap x where
+  Unwrap (f a) = a
+
+data ByteArray = ByteArray
+
+data family Vector a
+
+newtype instance Vector () = VUnit Int
+
+newtype instance Vector Word8 = VBytes ByteArray
+
+data instance Vector (a, b) = VPair !(Vector a) !(Vector b)
+
+type family VectorF a
+
+type instance VectorF () = VectorUnit
+
+newtype VectorUnit = VUnitF Int
+
+type instance VectorF Word8 = VectorWord8
+
+newtype VectorWord8 = VBytesF ByteArray
+
+type instance VectorF (a, b) = VectorPair a b
+
+data VectorPair a b = VPairF (VectorF a) (VectorF b)
 
 main :: IO ()
 main = do
