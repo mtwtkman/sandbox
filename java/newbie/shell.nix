@@ -6,7 +6,7 @@ mkShell {
     gradle
   ];
   shellHook = ''
-
-
+    alias b="gradle build"
+    alias r="gradle run"
   '';
 }
