@@ -129,3 +129,105 @@ class SimpleTimeClient implements TimeClient {
     System.out.println(myTimeClient.toString());
   }
 }
+
+class Animal {
+  public static void testClassMethod() {
+    System.out.println("The static method in Animal");
+  }
+
+  public void testInstanceMethod() {
+    System.out.println("The instance mthod in Animal");
+  }
+}
+
+class Cat extends Animal {
+  public static void testClassMethod() {
+    System.out.println("The static method in Cat");
+  }
+
+  public void testInstanceMethod() {
+    System.out.println("The instance mthod in Cat");
+  }
+
+  public static void main() {
+    Cat myCat = new Cat();
+    Animal myAnimal = myCat;
+    Animal.testClassMethod();
+    myAnimal.testInstanceMethod();
+  }
+}
+
+class Horse {
+  public String identifyMyself() {
+    return "I am a horse.";
+  }
+}
+
+interface Flyer {
+  default public String identifyMyself() {
+    return "I am able to fly.";
+  }
+}
+
+interface Mythical {
+  default public String identifyMySelf() {
+    return "I am a mythical creature.";
+  }
+}
+
+class Pegasus extends Horse implements Flyer, Mythical {
+  public static void main() {
+    Pegasus myApp = new Pegasus();
+    System.out.println(myApp.identifyMyself());
+  }
+}
+
+
+interface IAnimal {
+  default public String identifyMyself() {
+    return "I am an animal.";
+  }
+}
+
+interface EggLayer extends IAnimal {
+  default public String identifyMyself() {
+    return "I am able to lay eggs";
+  }
+}
+
+interface FireBreather extends IAnimal {}
+class Dragon implements EggLayer, FireBreather {
+  public static void main () {
+    Dragon myApp = new Dragon();
+    System.out.println(myApp.identifyMyself());
+  }
+}
+
+interface OperateCar {
+  default public int startEngine(Object key) {
+    return 1;
+  }
+}
+
+interface FlyCar {
+  default public int startEngine(Object key) {
+    return 2;
+  }
+}
+
+class FlyingCar implements OperateCar, FlyCar {
+  public int startEngine(Object key) {
+    return FlyCar.super.startEngine(key) + OperateCar.super.startEngine(key);
+  }
+}
+
+interface Mammal {
+  String identifyMyself();
+}
+
+class Mustang extends Horse implements Mammal {
+  public static void main() {
+    Mustang myApp = new Mustang();
+    System.out.println(myApp.identifyMyself());
+  }
+}

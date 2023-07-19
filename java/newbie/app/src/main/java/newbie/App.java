@@ -2,7 +2,7 @@ package newbie;
 
 public class App {
   public static void main(String[] args) {
-    return;
+    TestBikes.main();
   }
 }
 
