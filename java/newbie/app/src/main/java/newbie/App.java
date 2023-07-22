@@ -1,8 +1,12 @@
 package newbie;
 
+import newbie.hoge.ChildPackage;
+
 public class App {
   public static void main(String[] args) {
     BoxDemo.main();
+    ChildPackage c = new ChildPackage(1);
+    c.show();
   }
 }
 

@@ -21,12 +21,12 @@ class Box<T> {
 
   static void main() {
     Box<Integer> box = new Box<>();
-    box.set(new Integer(10));
-    box.inspect(new Double(3));
+    box.set(Integer.valueOf(10));
+    box.inspect(Double.valueOf(3));
   }
 }
 
-class NaturalNumber<T extends Integer> {
+class NaturalNumber<T extends Number> {
   private T n;
 
   NaturalNumber(T n) {
@@ -69,6 +69,7 @@ class MyClass<X2> {
 
   static void main() {
     MyClass<Integer> x = new MyClass<>("");
+    System.out.println(x);
   }
 }
 
