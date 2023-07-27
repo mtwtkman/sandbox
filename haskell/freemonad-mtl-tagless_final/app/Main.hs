@@ -1,3 +1,8 @@
 module Main where
+
+import FreeMonad
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = do
+  putStr (showProgram (program :: Free (Toy Char) ()))
+  pretty (output 'A')

@@ -9,7 +9,7 @@ common warnings
 executable x
     import:           warnings
     main-is:          Main.hs
-    build-depends:    base, mtl
+    build-depends:    base, mtl, free
     hs-source-dirs:   app
     default-language: Haskell2010
     other-modules: FreeMonad
