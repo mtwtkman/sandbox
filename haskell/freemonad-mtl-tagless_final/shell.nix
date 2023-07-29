@@ -18,6 +18,6 @@ mkShell {
     alias repl="cabal repl"
     alias run="cabal run --"
     alias t="cabal test"
-
+    alias fmt:cabal="cabal-fmt -i *.cabal"
   '';
 }
