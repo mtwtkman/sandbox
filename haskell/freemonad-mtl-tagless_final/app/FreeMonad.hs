@@ -1,4 +1,5 @@
 module FreeMonad where
+
 import Control.Exception (throwIO)
 
 -- ref: https://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html
@@ -88,3 +89,47 @@ interpret (Free (Output b x)) = print b >> interpret x
 interpret (Free (Bell x)) = ringBell >> interpret x
 interpret (Free Done) = return ()
 interpret (Pure _) = throwIO (userError "Improper termination")
+
+-- Concurrent by using Free monad structure
+data Thread m r = Atomic (m (Thread m r)) | Return r
+
+atomic :: (Monad m) => m a -> Thread m a
+atomic = Atomic . fmap Return
+
+instance Functor f => Functor (Thread f) where
+  fmap f (Atomic x) = Atomic (fmap (fmap f) x)
+  fmap f (Return r) = Return (f r)
+
+instance Functor f => Applicative (Thread f) where
+  pure = Return
+  Return f <*> Return r = Return (f r)
+  Return f <*> Atomic x = fmap f (Atomic x)
+  Atomic f <*> Return r = Atomic (fmap (fmap (\f' -> f' r)) f)
+  Atomic f <*> Atomic x = Atomic (fmap (<*> Atomic x) f)
+
+instance Monad m => Monad (Thread m) where
+  return = pure
+  (Atomic m) >>= f = Atomic (fmap (>>= f) m)
+  (Return r) >>= f = f r
+
+thread1 :: Thread IO ()
+thread1 = do
+  atomic $ print (1 :: Integer)
+  atomic $ print (2 :: Integer)
+
+thread2 :: Thread IO ()
+thread2 = do
+  str <- atomic getLine
+  atomic $ putStrLn str
+
+interleave :: Monad m => Thread m r -> Thread m r -> Thread m r
+interleave (Atomic m1) (Atomic m2) = do
+  next1 <- atomic m1
+  next2 <- atomic m2
+  interleave next1 next2
+interleave t1 (Return _) = t1
+interleave (Return _) t2 = t2
+
+runThread :: (Monad m) => Thread m r -> m r
+runThread (Atomic m) = m >>= runThread
+runThread (Return r) = return r
