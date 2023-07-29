@@ -133,3 +133,21 @@ interleave (Return _) t2 = t2
 runThread :: (Monad m) => Thread m r -> m r
 runThread (Atomic m) = m >>= runThread
 runThread (Return r) = return r
+
+-- Free is as same as List actually
+data List a = Cons a (List a) | Nil
+
+type List' a = Free ((,) a) ()
+
+-- means
+-- List' a = Free ((,) a) () = Free (a, List' a) | Pure () = Free a (List' a) | Pure ()
+
+-- singleton like liftF
+singleton :: a -> List a
+singleton x = Cons x Nil
+
+-- merge like interleave
+merge :: [a] -> [a] -> [a]
+merge (x1 : xs1) (x2 : xs2) = x1 : x2 : merge xs1 xs2
+merge xs1 [] = xs1
+merge [] xs2 = xs2
