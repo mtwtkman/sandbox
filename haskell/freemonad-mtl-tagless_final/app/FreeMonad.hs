@@ -1,6 +1,9 @@
+{-# LANGUAGE DeriveFunctor #-}
+
 module FreeMonad where
 
 import Control.Exception (throwIO)
+import Control.Monad (forever, when)
 
 -- ref: https://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html
 data Toy b next
@@ -151,3 +154,37 @@ merge :: [a] -> [a] -> [a]
 merge (x1 : xs1) (x2 : xs2) = x1 : x2 : merge xs1 xs2
 merge xs1 [] = xs1
 merge [] xs2 = xs2
+
+-- Game
+data Direction = Forward | Back
+
+data Image
+
+data Interaction next
+  = Look Direction (Image -> next)
+  | Fire Direction next
+  | ReadLine (String -> next)
+  | WriteLine String (Bool -> next)
+  deriving (Functor)
+
+type Program = Free Interaction
+
+easyToAnger :: Program a
+easyToAnger = forever $ do
+  str <- readLine
+  when (str == "No") $ do
+    fire Forward
+    _ <- writeLine "Take that!"
+    return ()
+
+look :: Direction -> Program Image
+look dir = liftF (Look dir id)
+
+fire :: Direction -> Program ()
+fire dir = liftF (Fire dir ())
+
+readLine :: Program String
+readLine = liftF (ReadLine id)
+
+writeLine :: String -> Program Bool
+writeLine s = liftF (WriteLine s id)
