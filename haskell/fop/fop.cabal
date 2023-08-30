@@ -1,0 +1,16 @@
+cabal-version: 3.0
+name:          fop
+version:       0.1.0.0
+author:        924277+mtwtkman@users.noreply.github.com
+maintainer:    mtwtkman
+build-type:    Simple
+
+common basic-options
+  ghc-options:      -Wall
+  build-depends:    base
+  default-language: Haskell2010
+
+executable sudoku
+  import:  basic-options
+  hs-source-dirs:   app/sudoku
+  main-is: Main.hs
