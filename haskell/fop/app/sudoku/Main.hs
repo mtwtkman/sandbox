@@ -2,7 +2,8 @@
 {-# LANGUAGE TypeOperators #-}
 
 module Main where
-
+-- question: https://stackoverflow.com/a/10242673
+-- answer: https://gist.github.com/danoneata/f46bfb5dc3ad2f15667c2024ff5178be
 import Control.Applicative (Alternative (..))
 import Data.Bifunctor (first)
 import Data.Char (digitToInt)
