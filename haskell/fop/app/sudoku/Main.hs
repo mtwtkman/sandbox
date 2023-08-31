@@ -2,13 +2,14 @@
 {-# LANGUAGE TypeOperators #-}
 
 module Main where
+
 -- question: https://stackoverflow.com/a/10242673
 -- answer: https://gist.github.com/danoneata/f46bfb5dc3ad2f15667c2024ff5178be
 import Control.Applicative (Alternative (..))
 import Data.Bifunctor (first)
 import Data.Char (digitToInt)
 import Data.List (intersperse)
-import Prelude hiding (all)
+import Prelude hiding (all, any)
 
 data Triple a = Tr a a a
   deriving (Show)
@@ -26,7 +27,7 @@ instance Foldable Triple where
 instance Traversable Triple where
   traverse f (Tr a b c) = Tr <$> f a <*> f b <*> f c
 
-newtype (:.) f g x = Comp {comp :: f (g x)}
+newtype (:.) f g x = Comp {comp :: f (g x)} deriving (Show)
 
 instance (Functor f, Functor g) => Functor (f :. g) where
   fmap f (Comp x) = Comp $ fmap (fmap f) x
