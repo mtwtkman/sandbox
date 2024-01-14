@@ -1,0 +1,18 @@
+cabal-version:   3.0
+name:            my-sandbox-http-client
+version:         0.1.0.0
+license:         NONE
+author:          924277+mtwtkman@users.noreply.github.com
+maintainer:      mtwtkman
+build-type:      Simple
+
+common warnings
+    ghc-options: -Wall
+
+executable run
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base, req
+    hs-source-dirs:   app
+    default-language: Haskell2010
+

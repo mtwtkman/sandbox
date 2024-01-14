@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> { } }:
 with pkgs;
-mkShell {
+mkShell rec {
   packages = [
     ghc
     cabal-install
@@ -12,6 +12,10 @@ mkShell {
     haskellPackages.ghci-dap
     haskellPackages.cabal-fmt
   ];
+  buildInputs = [
+    zlib
+  ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
   shellHook = ''
     alias b="cabal build"
     alias c="cabal clean"
