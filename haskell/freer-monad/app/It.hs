@@ -18,13 +18,7 @@ instance Applicative (It i) where
   Pure f <*> Pure a = Pure (f a)
   Pure f <*> Get k = Get (fmap (fmap f) k)
   Get f <*> Pure a = Get (fmap (\f' -> f' a) . f)
-  Get f <*> Get g =
-    Get
-      ( \i ->
-          let f' = f i
-              g' = g i
-           in f' <*> g'
-      )
+  Get f <*> Get g = Get (\i -> f i <*> g i)
 
 instance Monad (It i) where
   return = pure
