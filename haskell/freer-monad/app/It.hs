@@ -1,6 +1,6 @@
 module It where
 
-import Control.Monad ((<=<))
+import Control.Monad ((>=>))
 
 data It i a
   = Pure a
@@ -23,4 +23,4 @@ instance Applicative (It i) where
 instance Monad (It i) where
   return = pure
   Pure x >>= k = k x
-  Get k' >>= k = Get (k <=< k')
+  Get k' >>= k = Get (k' >=> k)
