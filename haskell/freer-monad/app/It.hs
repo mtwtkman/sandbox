@@ -21,6 +21,20 @@ instance Applicative (It i) where
   Get f <*> Get g = Get (\i -> f i <*> g i)
 
 instance Monad (It i) where
-  return = pure
   Pure x >>= k = k x
   Get k' >>= k = Get (k' >=> k)
+
+addGet :: Int -> It Int Int
+addGet x = ask >>= \i -> return (i + x)
+
+addN :: Int -> It Int Int
+addN n = foldl (>=>) return (replicate n addGet) 0
+
+runReader :: i -> It i a -> a
+runReader _ (Pure v) = v
+runReader x (Get k) = runReader x (k x)
+
+feedAll :: [i] -> It i a -> a
+feedAll _ (Pure v) = v
+feedAll [] _ = error "end of stream"
+feedAll (h : t) (Get k) = feedAll t (k h)
