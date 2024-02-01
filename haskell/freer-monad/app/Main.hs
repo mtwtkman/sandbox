@@ -8,7 +8,7 @@ evalIt = do
   print $ show $ It.runReader 10 (It.addN 8)
   print $ show $ It.feedAll [10, 2, 3, 7, 4] (It.addN 3)
 
-
 main :: IO ()
 main = do
   evalIt
+  evalFree

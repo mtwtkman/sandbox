@@ -1,6 +1,7 @@
 module RWIt where
 
 import Control.Monad ((>=>))
+import Data.Functor ((<&>))
 
 data It i o a
   = Pure a
@@ -35,3 +36,11 @@ runRdWriter i = loop mempty
   loop acc (Pure x) = (x, acc)
   loop acc (Get k) = loop acc (k i)
   loop acc (Put o k) = loop (acc `mappend` o) (k ())
+
+type StateIt s = It s s
+
+ask :: It i o i
+ask = Get Pure
+
+addGet :: Int -> It Int o Int
+addGet x = ask <&> (+ x)
