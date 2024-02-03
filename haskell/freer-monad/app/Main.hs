@@ -11,4 +11,3 @@ evalIt = do
 main :: IO ()
 main = do
   evalIt
-  evalFree
