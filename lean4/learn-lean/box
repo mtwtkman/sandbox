@@ -11,7 +11,7 @@ function show_box_script_usage
   echo "COMMANDS:"
   echo -e "\tenter | e [-r]"
   echo -e "\t\tEnter your development container via distrobox. If the continer have not existed,  will create it."
-  echo -e "\t\tYou can pass -r option to recreate the container then /home/mtwtkman/work/learn-lean/.distrobox/home will be recreated also."
+  echo -e "\t\tYou can pass -r option to recreate the container then /home/mtwtkman/work/sandbox/lean4/learn-lean/.distrobox/home will be recreated also."
   echo ""
   echo -e "\tinit | i [-f]"
   echo -e "\t\tInitialize your development container. You should run command in your development container at first."
@@ -31,9 +31,9 @@ shift
 function create_box
 {
   [ "${CONTAINER_ID}" ] && return
-  /bin/rm -rf /home/mtwtkman/work/learn-lean/.distrobox/home
-  [ "$(distrobox list | rg learn-lean-dev)" ] && distrobox assemble rm --file /home/mtwtkman/work/learn-lean/distrobox.ini
-  [ ! "$(distrobox list | rg learn-lean-dev)" ] && distrobox assemble create --file /home/mtwtkman/work/learn-lean/distrobox.ini
+  /bin/rm -rf /home/mtwtkman/work/sandbox/lean4/learn-lean/.distrobox/home
+  [ "$(distrobox list | rg learn-lean-dev)" ] && distrobox assemble rm --file /home/mtwtkman/work/sandbox/lean4/learn-lean/distrobox.ini
+  [ ! "$(distrobox list | rg learn-lean-dev)" ] && distrobox assemble create --file /home/mtwtkman/work/sandbox/lean4/learn-lean/distrobox.ini
 }
 
 function create_symlink
@@ -114,7 +114,7 @@ case "${cmd}" in
     initialize_box $@
     ;;
   bashrc|b) generate_bashrc;;
-  replace|r) distrobox assemble create --replace --file /home/mtwtkman/work/learn-lean/distrobox.ini;;
+  replace|r) distrobox assemble create --replace --file /home/mtwtkman/work/sandbox/lean4/learn-lean/distrobox.ini;;
   stop|s)
     [ "${CONTAINER_ID}" ] && exit 0
     [ ! "$(distrobox list | rg learn-lean-dev)" ] && exit 0
