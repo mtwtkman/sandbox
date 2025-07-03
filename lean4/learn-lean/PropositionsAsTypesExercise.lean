@@ -180,22 +180,48 @@ example : (p → q) → (¬q → ¬p) :=
 example : (p → q ∨ r) → ((p → q) ∨ (p → r)) :=
   λ h : p → q ∨ r =>
     Or.elim (em q)
-      (λ hq : q => Or.inl (λ hp : p => hq))
+      (λ hq : q => Or.inl (λ _ : p => hq))
       (λ hnq : ¬q =>
         Or.inr
           (λ hp : p =>
             Or.elim (h hp)
-            (λ hq : q => absurd hq hnq)
-            (λ hr : r => hr)))
+              (λ hq : q => absurd hq hnq)
+              (λ hr : r => hr)))
 
-example : ¬(p ∧ q) → ¬p ∨ ¬q := sorry
+example : ¬(p ∧ q) → ¬p ∨ ¬q :=
+  λ h : ¬(p ∧ q) =>
+    Or.elim (em p)
+      (λ hp : p => Or.inr (λ hq : q => h ⟨hp, hq⟩))
+      Or.inl
 
-example : ¬(p → q) → p ∧ ¬q := sorry
+example : ¬(p → q) → p ∧ ¬q :=
+    λ h : ¬(p → q) =>
+      ⟨Or.elim (em p)
+          (λ hp : p => hp)
+          (λ hnp : ¬p => False.elim (h (λ hp : p => absurd hp hnp)))
+      , λ hq : q =>
+          show False
+          from h (λ _ : p => hq)
+      ⟩
 
-example : (p → q) → (¬p ∨ q) := sorry
+example : (p → q) → (¬p ∨ q) :=
+  λ h : p → q =>
+    Or.elim (em p)
+      (λ hp : p =>
+        Or.inr (h hp))
+      Or.inl
 
-example : (¬q → ¬p) → (p → q) := sorry
+example : (¬q → ¬p) → (p → q) :=
+  λ h : ¬q → ¬p =>
+    λ hp : p =>
+      Or.elim (em q)
+        (λ hq : q => hq)
+        (λ hnq : ¬q => absurd hp (h hnq))
 
-example : p ∨ ¬p := sorry
+example : p ∨ ¬p := em p
 
-example : (((p → q) → p) → p) := sorry
+example : (((p → q) → p) → p) :=
+  λ h : (p → q) → p =>
+    Or.elim (em p)
+      (λ hp : p => hp)
+    (λ hnp : ¬p => h (λ hp : p => absurd hp hnp))
